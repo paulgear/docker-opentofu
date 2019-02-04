@@ -1,5 +1,5 @@
-TERRAFORM_VERSION = 0.11.11
-IMAGE_NAME ?= cmdlabs/terraform-utils:$(TERRAFORM_VERSION)
+VERSION = 1.0.0
+IMAGE_NAME ?= cmdlabs/terraform-utils:$(VERSION)
 
 dockerBuild:
 	docker build -t $(IMAGE_NAME) .
@@ -8,11 +8,11 @@ pull:
 	docker pull $(IMAGE_NAME)
 
 shell:
-	docker run --rm -it -v $(PWD):/opt/app:Z -w /opt/app $(IMAGE_NAME) sh
+	docker run --rm -it -v $(PWD):/work:Z -w /work --entrypoint '' $(IMAGE_NAME) /bin/sh
 
 tag:
-	-git tag -d $(TERRAFORM_VERSION)
-	-git push origin :refs/tags/$(TERRAFORM_VERSION)
-	git tag $(TERRAFORM_VERSION)
-	git push origin $(TERRAFORM_VERSION)
+	# -git tag -d $(VERSION)
+	# -git push origin :refs/tags/$(VERSION)
+	git tag $(VERSION)
+	git push origin $(VERSION)
 

@@ -12,22 +12,17 @@ RUN git clone https://github.com/hashicorp/terraform.git ./ && \
 git checkout v${TERRAFORM_VERSION} && \
 /bin/bash scripts/build.sh
 
-ENV PACKER_VERSION=1.3.3
-ENV PACKER_SHA256SUM=efa311336db17c0709d5069509c34c35f0d59c63dfb05f61d4572c5a26b563ea
+ENV AWSCLI_VERSION=1.16.96
 
-RUN apk add --update git bash wget openssl
+RUN apk --no-cache update && \
+    apk --no-cache add python py-pip py-setuptools ca-certificates groff less bash make jq gettext-dev curl wget g++ zip git && \
+    pip --no-cache-dir install --upgrade awscli==${AWSCLI_VERSION} && \
+    update-ca-certificates && \
+    rm -rf /var/cache/apk/*
 
-ADD https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip ./
-ADD https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS ./
+RUN mkdir -p /work
 
-RUN sed -i '/.*linux_amd64.zip/!d' packer_${PACKER_VERSION}_SHA256SUMS
-RUN sha256sum -cs packer_${PACKER_VERSION}_SHA256SUMS
-RUN unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /bin
-RUN rm -f packer_${PACKER_VERSION}_linux_amd64.zip
-
-RUN mkdir -p /terraform
-
-WORKDIR /terraform
+WORKDIR /work
 ENTRYPOINT ["terraform"]
 
 CMD ["--help"]
