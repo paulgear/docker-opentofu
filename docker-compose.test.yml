@@ -1,0 +1,4 @@
+sut:
+  build: .
+  entrypoint: ''
+  command: bash /run_tests.sh
