@@ -20,6 +20,14 @@ RUN apk --no-cache update && \
     update-ca-certificates && \
     rm -rf /var/cache/apk/*
 
+ENV TERRAFORM_DOCS_VERSION 0.6.0
+RUN curl -L -o /usr/local/bin/terraform-docs https://github.com/segmentio/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64 && \
+    chmod +x /usr/local/bin/terraform-docs
+
+ENV GIT_CHGLOG_VERSION 0.7.1
+RUN curl -L -o /usr/local/bin/git-chglog https://github.com/git-chglog/git-chglog/releases/download/${GIT_CHGLOG_VERSION}/git-chglog_linux_amd64 && \
+    chmod +x /usr/local/bin/git-chglog
+
 RUN mkdir -p /work
 
 WORKDIR /work
