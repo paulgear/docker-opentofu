@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.0] - 2017-06-20
+## [2.0.0] - 2019-03-01
 ### Added
 - terraform-docs
 - git-chglog
