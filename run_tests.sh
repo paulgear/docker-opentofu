@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-terraform --help
+terraform -help
 terraform-docs --help
 git-chglog --help
 aws --version
