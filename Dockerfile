@@ -2,14 +2,14 @@ FROM alpine:3.9
 
 RUN apk add --update --no-cache python3 ca-certificates groff less bash bash-completion make jq gettext-dev coreutils curl wget zip git openssh-client
 
-ENV TERRAFORM_VERSION=0.12.3
+ENV TERRAFORM_VERSION=0.12.6
 RUN curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform.zip -d /tmp/ && \
     mv /tmp/terraform /usr/local/bin/terraform && \
     chmod +x /usr/local/bin/terraform && \
     rm -rf /tmp/terraform.zip
 
-ENV AWSCLI_VERSION=1.16.144
+ENV AWSCLI_VERSION=1.16.214
 RUN pip3 --no-cache-dir install --upgrade awscli==${AWSCLI_VERSION}
 
 ENV TERRAFORM_DOCS_VERSION 0.6.0
