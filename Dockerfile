@@ -20,12 +20,6 @@ ENV GIT_CHGLOG_VERSION 0.7.1
 RUN curl -L -o /usr/local/bin/git-chglog https://github.com/git-chglog/git-chglog/releases/download/${GIT_CHGLOG_VERSION}/git-chglog_linux_amd64 && \
     chmod +x /usr/local/bin/git-chglog
 
-#Shell setup
-COPY scripts/aws-ps1.sh /root/.aws-ps1.sh
-COPY scripts/aws-reauth.sh /root/.aws-reauth.sh
-COPY scripts/terraform-ps1.sh /root/.terraform-ps1.sh
-COPY scripts/.bashrc /root/.bashrc
-
 RUN mkdir -p /work
 
 #Add tests
