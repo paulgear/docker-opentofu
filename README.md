@@ -1,6 +1,6 @@
 # docker-terraform-utils
 
-Docker image with `terraform` and other useful utilities
+Docker image with `terraform`, `aws-cli` and `terraform-docs`
 
 ## Why?
 
@@ -25,7 +25,7 @@ docker-compose.yml:
 ```yaml
 services:
   terraform:
-    image: cmdlabs/terraform-utils:5.2.0
+    image: cmdlabs/terraform-utils:6.0.0
     volumes:
       - .:/work:Z
 ```
