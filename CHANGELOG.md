@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.0] - 2020-02-17
+### Breaking
+- Removed remaining packages that were expected to be used in shells
+- Upgrade to Alpine 3.11
+- Introduce new CICD process
+- Removed git-chglog
+- Switch entrypont from bash to terraform
+
+### Changed
+- Upgrade Terraform/AWS CLI/Terraform-docs
+
 ## [5.3.0] - 2019-10-24
 ### Changed
 - Upgraded terraform to 0.12.10
