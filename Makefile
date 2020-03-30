@@ -1,6 +1,6 @@
 IMAGE_NAME ?= cmdlabs/terraform-utils
 
-RELEASE_VERSION = 6.0.0
+RELEASE_VERSION = 6.1.0
 BUILD_VERSION ?= testing
 
 ifdef CI_COMMIT_REF_NAME
@@ -50,6 +50,15 @@ pushLatest: login
 .PHONY: tagLatest
 
 tag:
-	git tag $(RELEASE_VERSION)
+	git tag -a $(RELEASE_VERSION) -m ''
 	git push origin $(RELEASE_VERSION)
 PHONY: tag
+
+publish: .env
+	git fetch --all
+	git remote add github https://$(GIT_USERNAME):$(GIT_PASSWORD)@github.com/cmdlabs/$(CI_PROJECT_NAME)
+	git checkout master
+	git pull origin master
+	git push --follow-tags github master
+	curl -X POST -H 'Content-type: application/json' --data '{"text":"A new commit has been published to Github\nProject: $(CI_PROJECT_NAME)\nRef: $(CI_COMMIT_REF_NAME)\nDiff: https://github.com/cmdlabs/$(CI_PROJECT_NAME)/commit/$(CI_COMMIT_SHA)"}' $(GIT_PUBLISHING_WEBHOOK)
+PHONY: publish
