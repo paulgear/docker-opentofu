@@ -4,6 +4,7 @@ stages:
   - scan
   - push
   - pushLatest
+  - publish
 
 build:
   stage: build
@@ -46,3 +47,15 @@ pushLatest:
     - master
   script:
     - make pushLatest
+
+publish:
+  stage: publish
+  tags:
+    - cmd
+  script:
+    - make publish
+  variables:
+    GIT_STRATEGY: clone
+  only:
+    - master
+    - tags
