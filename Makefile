@@ -54,7 +54,7 @@ tag:
 	git push origin $(RELEASE_VERSION)
 PHONY: tag
 
-publish: .env
+publish:
 	git fetch --all
 	git remote add github https://$(GIT_USERNAME):$(GIT_PASSWORD)@github.com/cmdlabs/$(CI_PROJECT_NAME)
 	git checkout master
