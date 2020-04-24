@@ -9,10 +9,10 @@ RUN curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TER
     chmod +x /usr/local/bin/terraform && \
     rm -rf /tmp/terraform.zip
 
-ENV AWSCLI_VERSION=1.18.32
+ENV AWSCLI_VERSION=1.18.45
 RUN pip3 --no-cache-dir install --upgrade awscli==${AWSCLI_VERSION}
 
-ENV TERRAFORM_DOCS_VERSION 0.8.2
+ENV TERRAFORM_DOCS_VERSION 0.9.1
 RUN curl -L -o /usr/local/bin/terraform-docs https://github.com/segmentio/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64 && \
     chmod +x /usr/local/bin/terraform-docs
 
