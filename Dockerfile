@@ -2,7 +2,7 @@ FROM alpine:3.11
 
 RUN apk add --update --no-cache python3 ca-certificates curl git openssh-client
 
-ENV TERRAFORM_VERSION=0.14.2
+ENV TERRAFORM_VERSION=0.14.5
 RUN curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform.zip -d /tmp/ && \
     mv /tmp/terraform /usr/local/bin/terraform && \
