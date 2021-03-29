@@ -1,6 +1,6 @@
 FROM alpine:3.11
 
-RUN apk add --update --no-cache python3 ca-certificates curl git openssh-client
+RUN apk add --update --no-cache python3 ca-certificates curl git openssh-client zip
 
 ENV TERRAFORM_VERSION=0.14.6
 RUN curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
