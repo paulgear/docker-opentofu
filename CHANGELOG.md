@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [10.2.0] - 2021-08-18
+### Changed
+- Upgraded terraform to 1.0.4
+- Upgraded aws cli to 1.20.23
+- Upgraded terraform-docs to 0.15.0
+- Upgrade apk-tools
+- Re-ordered layers
+
 ## [10.1.0] - 2021-07-08
 ### Added
 - bash
