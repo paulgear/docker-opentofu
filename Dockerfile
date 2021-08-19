@@ -5,7 +5,7 @@ RUN mkdir -p /work
 RUN apk add --update --upgrade --no-cache bash ca-certificates curl git openssh-client python3 tree zip apk-tools
 
 ENV AWSCLI_VERSION=1.20.23
-RUN pip3 --no-cache-dir install --upgrade awscli==${AWSCLI_VERSION} argparse python-gitlab requests
+RUN pip3 --no-cache-dir install --upgrade awscli==${AWSCLI_VERSION} argparse python-gitlab requests pan-os-python boto3
 
 ENV TERRAFORM_DOCS_VERSION=0.15.0
 RUN curl -L -o /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz && \
@@ -13,7 +13,7 @@ RUN curl -L -o /tmp/terraform-docs.tar.gz https://github.com/terraform-docs/terr
     mv /tmp/terraform-docs /usr/local/bin/ && \
     rm -rf /tmp/*
 
-ENV TERRAFORM_VERSION=1.0.4
+ENV TERRAFORM_VERSION=1.0.5
 RUN curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip /tmp/terraform.zip -d /tmp/ && \
     mv /tmp/terraform /usr/local/bin/terraform && \

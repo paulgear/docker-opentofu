@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [10.3.0] - 2021-08-20
+### Changed
+- Upgraded terraform to 1.0.5
+
+### Added
+- Added python libraries: pan-os-python boto3
+
 ## [10.2.0] - 2021-08-18
 ### Changed
 - Upgraded terraform to 1.0.4

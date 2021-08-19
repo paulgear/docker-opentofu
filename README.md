@@ -25,7 +25,7 @@ docker-compose.yml:
 ```yaml
 services:
   terraform:
-    image: cmdlabs/terraform-utils:10.2.0
+    image: cmdlabs/terraform-utils:10.3.0
     volumes:
       - .:/work:Z
 ```
