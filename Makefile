@@ -1,6 +1,6 @@
 IMAGE_NAME ?= cmdlabs/terraform-utils
 
-RELEASE_VERSION = 10.3.0
+RELEASE_VERSION = 10.4.0
 BUILD_VERSION ?= testing
 
 ifdef CI_COMMIT_REF_NAME
@@ -25,6 +25,7 @@ test:
 	docker run --rm --entrypoint=terraform $(IMAGE_NAME):$(BUILD_VERSION) version
 	docker run --rm --entrypoint=aws $(IMAGE_NAME):$(BUILD_VERSION) --version
 	docker run --rm --entrypoint=terraform-docs $(IMAGE_NAME):$(BUILD_VERSION) version
+	docker run --rm --entrypoint=tflint $(IMAGE_NAME):$(BUILD_VERSION) --version
 	@echo "All tests completed successfully"
 PHONY: test
 

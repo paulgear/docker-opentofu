@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [10.4.0] - 2021-10-22
+### Changed
+- Upgraded terraform to 1.0.9
+- Upgraded terraform-docs to 0.16.0
+- Use ARG instead of ENV to define versions
+### Added
+- Added tflint v0.33.0
+
 ## [10.3.0] - 2021-08-20
 ### Changed
 - Upgraded terraform to 1.0.5
