@@ -1,63 +1,77 @@
-FROM alpine:3
+ARG     UBUNTU_RELEASE=focal
+FROM    ubuntu:${UBUNTU_RELEASE}
 
-ENV BINDIR=/usr/local/bin
-RUN mkdir -p ~/.tflint.d/plugins
+ARG     APT_PKGS="\
+apt-transport-https \
+curl \
+gnupg \
+python3-colorama \
+python3-dateutil \
+python3-jmespath \
+python3-pip \
+python3-pyasn1 \
+python3-rsa \
+python3-yaml \
+software-properties-common \
+unzip \
+"
+ARG     MIRROR="http://ap-southeast-2.ec2.archive.ubuntu.com"
+ARG     UBUNTU_RELEASE
+ENV     DEBIAN_FRONTEND=noninteractive
 
-# integrated Azure instructions from https://github.com/Azure/azure-cli/issues/19591#issue-998886589
-RUN apk add --update --upgrade --no-cache \
-    apk-tools \
-    bash \
-    ca-certificates \
-    cargo \
-    curl \
-    gcc \
-    git \
-    libffi-dev \
-    make \
-    musl-dev \
-    openssh-client \
-    openssl-dev \
-    python3 \
-    python3-dev \
-    py3-pip \
-    tree \
-    zip
-RUN pip --no-cache-dir install --upgrade \
-    argparse \
-    awscli \
-    azure-cli \
-    boto3 \
-    pan-os-python \
-    pip \
-    python-gitlab \
-    requests
+RUN     sed -ri \
+            -e "s^http://.*archive\.ubuntu\.com^${MIRROR}^" \
+            -e "1i deb ${MIRROR}/ubuntu/ ${UBUNTU_RELEASE}-security main restricted universe multiverse\n" \
+            /etc/apt/sources.list && \
+        apt update && \
+        apt install --no-install-recommends -y ${APT_PKGS} && \
+        apt upgrade --no-install-recommends --autoremove --purge -y && \
+        rm -rf /var/lib/apt/lists/*
+
+RUN     curl -s https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+        add-apt-repository https://packages.microsoft.com/repos/azure-cli && \
+        apt install --no-install-recommends -y azure-cli && \
+        rm -rf /var/lib/apt/lists/*
+
+ARG     PIP_PKGS="\
+awscli \
+boto3 \
+"
+
+RUN     pip --no-cache-dir install --upgrade ${PIP_PKGS}
 
 WORKDIR /tmp/installer
+ARG     BINDIR=/usr/local/bin
+RUN     mkdir -p ~/.tflint.d/plugins
 
-ARG TERRAFORM_DOCS_VERSION=0.16.0
-RUN curl -L -o terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz && \
-    tar -xvf terraform-docs.tar.gz && \
-    mv terraform-docs ${BINDIR}/ && \
-    rm -rf *
+ARG     TERRAFORM_DOCS_VERSION=0.16.0
+RUN     curl -sL -o terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz && \
+        tar -xvf terraform-docs.tar.gz && \
+        mv terraform-docs ${BINDIR}/ && \
+        rm -rf *
 
-ARG TERRAFORM_VERSION=1.0.11
-RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    unzip terraform.zip && \
-    mv terraform ${BINDIR} && \
-    chmod +x ${BINDIR}/terraform && \
-    rm -rf *
+ARG     TERRAFORM_VERSION=1.0.11
+RUN     curl -sL -o terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+        unzip terraform.zip && \
+        mv terraform ${BINDIR} && \
+        chmod +x ${BINDIR}/terraform && \
+        rm -rf *
 
-ARG TFLINT_VERSION=0.34.1
-RUN wget -O tflint.zip https://github.com/terraform-linters/tflint/releases/download/v"${TFLINT_VERSION}"/tflint_linux_amd64.zip && \
-    unzip tflint.zip -d ${BINDIR}/ && \
-    rm -rf *
+ARG     TFLINT_VERSION=0.34.1
+RUN     curl -sL -o tflint.zip https://github.com/terraform-linters/tflint/releases/download/v"${TFLINT_VERSION}"/tflint_linux_amd64.zip && \
+        unzip tflint.zip -d ${BINDIR}/ && \
+        rm -rf *
 
-ARG TFLINT_RULESET_AWS_VERSION=0.10.1
-RUN wget -O tflint-ruleset-aws.zip https://github.com/terraform-linters/tflint-ruleset-aws/releases/download/v"${TFLINT_RULESET_AWS_VERSION}"/tflint-ruleset-aws_linux_amd64.zip && \
-    unzip tflint-ruleset-aws.zip -d ~/.tflint.d/plugins && \
-   rm tflint-ruleset-aws.zip
+ARG     TFLINT_RULESET_AWS_VERSION=0.10.1
+RUN     curl -sL -o tflint-ruleset-aws.zip https://github.com/terraform-linters/tflint-ruleset-aws/releases/download/v"${TFLINT_RULESET_AWS_VERSION}"/tflint-ruleset-aws_linux_amd64.zip && \
+        unzip tflint-ruleset-aws.zip -d ~/.tflint.d/plugins && \
+        rm tflint-ruleset-aws.zip
+
+RUN     terraform --version && \
+        terraform-docs --version && \
+        tflint --version
 
 WORKDIR /work
-RUN rmdir /tmp/installer
+RUN     rmdir /tmp/installer
 
 ENTRYPOINT ["bash"]
