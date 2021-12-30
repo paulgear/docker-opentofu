@@ -1,5 +1,4 @@
-ARG     UBUNTU_RELEASE=focal
-FROM    ubuntu:${UBUNTU_RELEASE}
+FROM    paulgear/base:latest
 
 ARG     APT_PKGS="\
 apt-transport-https \
@@ -15,20 +14,11 @@ python3-yaml \
 software-properties-common \
 unzip \
 "
-ARG     MIRROR="http://ap-southeast-2.ec2.archive.ubuntu.com"
-ARG     UBUNTU_RELEASE
 ENV     DEBIAN_FRONTEND=noninteractive
 
-RUN     sed -ri \
-            -e "s^http://.*archive\.ubuntu\.com^${MIRROR}^" \
-            -e "1i deb ${MIRROR}/ubuntu/ ${UBUNTU_RELEASE}-security main restricted universe multiverse\n" \
-            /etc/apt/sources.list && \
-        apt update && \
+RUN     apt update && \
         apt install --no-install-recommends -y ${APT_PKGS} && \
-        apt upgrade --no-install-recommends --autoremove --purge -y && \
-        rm -rf /var/lib/apt/lists/*
-
-RUN     curl -s https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+        curl -s https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
         add-apt-repository https://packages.microsoft.com/repos/azure-cli && \
         apt install --no-install-recommends -y azure-cli && \
         rm -rf /var/lib/apt/lists/*
