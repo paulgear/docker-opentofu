@@ -40,19 +40,19 @@ RUN     curl -sL -o terraform-docs.tar.gz https://github.com/terraform-docs/terr
         mv terraform-docs ${BINDIR}/ && \
         rm -rf *
 
-ARG     TERRAFORM_VERSION=1.0.11
+ARG     TERRAFORM_VERSION=1.2.5
 RUN     curl -sL -o terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
         unzip terraform.zip && \
         mv terraform ${BINDIR} && \
         chmod +x ${BINDIR}/terraform && \
         rm -rf *
 
-ARG     TFLINT_VERSION=0.34.1
+ARG     TFLINT_VERSION=0.38.1
 RUN     curl -sL -o tflint.zip https://github.com/terraform-linters/tflint/releases/download/v"${TFLINT_VERSION}"/tflint_linux_amd64.zip && \
         unzip tflint.zip -d ${BINDIR}/ && \
         rm -rf *
 
-ARG     TFLINT_RULESET_AWS_VERSION=0.10.1
+ARG     TFLINT_RULESET_AWS_VERSION=0.15.0
 RUN     curl -sL -o tflint-ruleset-aws.zip https://github.com/terraform-linters/tflint-ruleset-aws/releases/download/v"${TFLINT_RULESET_AWS_VERSION}"/tflint-ruleset-aws_linux_amd64.zip && \
         unzip tflint-ruleset-aws.zip -d ~/.tflint.d/plugins && \
         rm tflint-ruleset-aws.zip
