@@ -3,7 +3,9 @@ FROM    paulgear/base:latest
 ARG     APT_PKGS="\
 apt-transport-https \
 curl \
+git \
 gnupg \
+groff \
 python3-colorama \
 python3-dateutil \
 python3-jmespath \
