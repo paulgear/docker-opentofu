@@ -20,7 +20,7 @@ ENV     DEBIAN_FRONTEND=noninteractive
 
 RUN     apt update && \
         apt install --no-install-recommends -y ${APT_PKGS} && \
-        curl -s https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+        curl -s https://packages.microsoft.com/keys/microsoft.asc -o /etc/apt/trusted.gpg.d/microsoft.asc && \
         add-apt-repository https://packages.microsoft.com/repos/azure-cli && \
         apt install --no-install-recommends -y azure-cli && \
         rm -rf /var/lib/apt/lists/*
