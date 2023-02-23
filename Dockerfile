@@ -6,6 +6,7 @@ curl \
 git \
 gnupg \
 groff \
+make \
 python3-colorama \
 python3-dateutil \
 python3-jmespath \
