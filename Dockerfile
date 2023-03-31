@@ -43,7 +43,7 @@ RUN     curl -sL -o terraform-docs.tar.gz https://github.com/terraform-docs/terr
         mv terraform-docs ${BINDIR}/ && \
         rm -rf *
 
-ARG     TERRAFORM_VERSION=1.4.2
+ARG     TERRAFORM_VERSION=1.4.4
 RUN     curl -sL -o terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
         unzip terraform.zip && \
         mv terraform ${BINDIR} && \
