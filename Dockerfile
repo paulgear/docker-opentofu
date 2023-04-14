@@ -43,14 +43,14 @@ RUN     curl -sL -o terraform-docs.tar.gz https://github.com/terraform-docs/terr
         mv terraform-docs ${BINDIR}/ && \
         rm -rf *
 
-ARG     TERRAFORM_VERSION=1.4.4
+ARG     TERRAFORM_VERSION=1.4.5
 RUN     curl -sL -o terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
         unzip terraform.zip && \
         mv terraform ${BINDIR} && \
         chmod +x ${BINDIR}/terraform && \
         rm -rf *
 
-ARG     TFLINT_VERSION=0.45.0
+ARG     TFLINT_VERSION=0.46.0
 RUN     curl -sL -o tflint.zip https://github.com/terraform-linters/tflint/releases/download/v"${TFLINT_VERSION}"/tflint_linux_amd64.zip && \
         unzip tflint.zip -d ${BINDIR}/ && \
         rm -rf *
