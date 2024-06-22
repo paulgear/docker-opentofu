@@ -1,8 +1,6 @@
 FROM    paulgear/base:latest
 
 ARG     APT_PKGS="\
-apt-transport-https \
-curl \
 git \
 gnupg \
 groff \
@@ -17,13 +15,25 @@ python3-yaml \
 software-properties-common \
 unzip \
 "
-ENV     DEBIAN_FRONTEND=noninteractive
+ARG     http_proxy
+ARG     https_proxy
 
-RUN     apt update && \
-        apt install --no-install-recommends -y ${APT_PKGS} && \
-        curl -s https://packages.microsoft.com/keys/microsoft.asc -o /etc/apt/trusted.gpg.d/microsoft.asc && \
-        add-apt-repository https://packages.microsoft.com/repos/azure-cli && \
-        apt install --no-install-recommends -y azure-cli && \
+ENV     DEBIAN_FRONTEND=noninteractive
+ENV     http_proxy=${http_proxy}
+ENV     https_proxy=${https_proxy}
+ENV     HTTP_PROXY=${http_proxy}
+ENV     HTTPS_PROXY=${https_proxy}
+
+RUN     apt-get update && \
+        apt-get install --no-install-recommends -y ${APT_PKGS} && \
+        rm -rf /var/lib/apt/lists/*
+
+RUN     curl -fsSL https://get.opentofu.org/opentofu.gpg -o /etc/apt/keyrings/opentofu.gpg && \
+        curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg && \
+        chmod a+r /etc/apt/keyrings/opentofu.gpg /etc/apt/keyrings/opentofu-repo.gpg && \
+        echo "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" >/etc/apt/sources.list.d/opentofu.list && \
+        apt-get update && \
+        apt-get install --no-install-recommends -y tofu && \
         rm -rf /var/lib/apt/lists/*
 
 ARG     PIP_PKGS="\
@@ -31,39 +41,31 @@ awscli \
 boto3 \
 "
 
-RUN     pip --no-cache-dir install --upgrade ${PIP_PKGS}
+RUN     pip --no-cache-dir install --upgrade --break-system-packages ${PIP_PKGS}
 
 WORKDIR /tmp/installer
 ARG     BINDIR=/usr/local/bin
 RUN     mkdir -p ~/.tflint.d/plugins
 
-ARG     TERRAFORM_DOCS_VERSION=0.16.0
+ARG     TERRAFORM_DOCS_VERSION=0.18.0
 RUN     curl -sL -o terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz && \
         tar -xvf terraform-docs.tar.gz && \
         mv terraform-docs ${BINDIR}/ && \
         rm -rf *
 
-ARG     TERRAFORM_VERSION=1.5.5
-RUN     curl -sL -o terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-        unzip terraform.zip && \
-        mv terraform ${BINDIR} && \
-        chmod +x ${BINDIR}/terraform && \
-        rm -rf *
-
-ARG     TFLINT_VERSION=0.47.0
+ARG     TFLINT_VERSION=0.51.1
 RUN     curl -sL -o tflint.zip https://github.com/terraform-linters/tflint/releases/download/v"${TFLINT_VERSION}"/tflint_linux_amd64.zip && \
         unzip tflint.zip -d ${BINDIR}/ && \
         rm -rf *
 
-ARG     TFLINT_RULESET_AWS_VERSION=0.26.0
+ARG     TFLINT_RULESET_AWS_VERSION=0.32.0
 RUN     curl -sL -o tflint-ruleset-aws.zip https://github.com/terraform-linters/tflint-ruleset-aws/releases/download/v"${TFLINT_RULESET_AWS_VERSION}"/tflint-ruleset-aws_linux_amd64.zip && \
         unzip tflint-ruleset-aws.zip -d ~/.tflint.d/plugins && \
         rm tflint-ruleset-aws.zip
 
-RUN     terraform --version && \
+RUN     tofu --version && \
         terraform-docs --version && \
         tflint --version
 
+USER    ubuntu
 WORKDIR /work
-
-ENTRYPOINT ["bash"]
